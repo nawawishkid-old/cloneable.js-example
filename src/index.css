@@ -1,0 +1,16 @@
+@import "./prism.css";
+
+.example {
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.example .playground .tray {
+  max-height: 200px;
+  padding: 1em;
+  overflow-y: auto;
+}
+
+.example .codes pre {
+  max-height: 400px;
+}
