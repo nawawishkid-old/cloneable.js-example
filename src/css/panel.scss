@@ -1,0 +1,30 @@
+.panels {
+  .panel-content {
+    display: none;
+    width: 100%;
+
+    &.active {
+      display: inline-block;
+    }
+  }
+
+  .panel-tab {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: none;
+    cursor: default;
+    background-color: wheat;
+
+    &.active {
+      background-color: coral;
+    }
+
+    &:first-child {
+      border-top-left-radius: 5px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 5px;
+    }
+  }
+}

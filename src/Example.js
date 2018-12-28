@@ -1,4 +1,5 @@
 import { createElement, createElementData } from "./helpers";
+import PanelList from "./PanelList";
 
 /**
  * <div class="{type}">
@@ -12,10 +13,21 @@ const getCodeElementData = (type, codeString) => {
   const codeElement = createElementData(
     "code",
     `language-${language}`,
+    null,
     codeString
   );
-  const preElement = createElementData("pre", "line-numbers", codeElement);
-  const wrapperElement = createElementData("div", type, preElement);
+  const preElement = createElementData(
+    "pre",
+    "line-numbers",
+    null,
+    codeElement
+  );
+  const wrapperElement = createElementData(
+    "div",
+    `panel-content ${type}`,
+    null,
+    preElement
+  );
 
   return wrapperElement;
 };
@@ -23,14 +35,19 @@ const getCodeElementData = (type, codeString) => {
 const getPlaygroundElementData = () => createElementData("div", "playground");
 // <div class="codes"></div>
 const getCodesWrapperElementData = (...children) =>
-  createElementData("div", "codes", ...children);
+  createElementData("div", "codes", null, ...children);
 // <h3 class="title">{title}</h3>
-const getTitleElementData = title => createElementData("h3", "title", title);
+const getTitleElementData = title =>
+  createElementData("h3", "title", null, title);
 // <p class="detail">{detail}</p>
-const getDetailElementData = detail => createElementData("p", "detail", detail);
+const getDetailElementData = detail =>
+  createElementData("p", "detail", null, detail);
 // <div class="example"></div>
 const getExampleElementData = (...children) =>
-  createElementData("div", "example", ...children);
+  createElementData("div", "example", null, ...children);
+// <div class="panel-tab">{children}</div>
+const getPanelTabElementData = (...children) =>
+  createElementData("button", "panel-tab", null, ...children);
 
 class Example {
   constructor(title, detail, containerElem) {
@@ -57,7 +74,28 @@ class Example {
       title,
       detail,
       playground,
-      getCodesWrapperElementData(beforeCode, afterCode, optionsCode)
+      createElementData(
+        "div",
+        "panels",
+        null,
+        createElementData(
+          "div",
+          "panel-tabs",
+          null,
+          getPanelTabElementData("Before"),
+          getPanelTabElementData("After"),
+          getPanelTabElementData("Options")
+        ),
+        createElementData(
+          "div",
+          "panel-contents",
+          null,
+          beforeCode,
+          afterCode,
+          optionsCode
+        )
+      )
+      // getCodesWrapperElementData(beforeCode, afterCode, optionsCode)
     );
 
     // const datas = [
@@ -77,13 +115,15 @@ class Example {
       title: this.dom.querySelector(".title"),
       detail: this.dom.querySelector(".detail"),
       playground: this.dom.querySelector(".playground"),
-      beforeCode: this.dom.querySelector(".codes .before code"),
-      afterCode: this.dom.querySelector(".codes .after code"),
-      optionsCode: this.dom.querySelector(".codes .options code")
+      panels: this.dom.querySelector(".panels"),
+      beforeCode: this.dom.querySelector(".panels .before code"),
+      afterCode: this.dom.querySelector(".panels .after code"),
+      optionsCode: this.dom.querySelector(".panels .options code")
     };
 
     this.doms.playground.appendChild(this.containerElem);
-    console.log("this.doms: ", this.dom);
+
+    new PanelList(this.doms.panels).activate(0);
     this.isCreated = true;
 
     return this;

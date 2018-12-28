@@ -4,7 +4,8 @@ import Example from "./Example";
 import { createElement, getPrettyHtml } from "./helpers";
 import { objectToString } from "./js-to-string";
 
-const { Prism, js_beautify } = window;
+const { Prism } = window;
+const app = document.getElementById("app");
 
 examples.forEach(ex => {
   const { title, detail, containerData, cloneableOptions } = ex;
@@ -12,6 +13,8 @@ examples.forEach(ex => {
   const cloneable = new Cloneable(containerElem, cloneableOptions);
   const example = new Example(title, detail, containerElem);
   const optionsString = objectToString(cloneable.optionController._data, 2);
+
+  console.log("containerElem: ", containerElem);
 
   cloneable.on("afterStateChange", function() {
     example.code("after", getPrettyHtml(containerElem));
@@ -23,5 +26,5 @@ examples.forEach(ex => {
   example.code("options", optionsString);
   example.code("after", getPrettyHtml(containerElem));
 
-  document.body.appendChild(example.dom);
+  app.appendChild(example.dom);
 });

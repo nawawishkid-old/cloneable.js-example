@@ -20,7 +20,7 @@ const createElement = data => {
   const { tagName, attributes, children } = data;
   const elem = document.createElement(tagName);
 
-  Object.keys(attributes).forEach(key => (elem[key] = attributes[key]));
+  setObjectProps(elem, attributes, ["style", "dataset"]);
   children.forEach(child => {
     if (typeof child === "string") {
       elem.innerHTML += child;
@@ -33,6 +33,25 @@ const createElement = data => {
 };
 
 /**
+ *
+ * @param {object} object Object to be set property.
+ * @param {object} props Property to set to the object.
+ * @param {string[]} list Array of property keys that need to be set recursively.
+ */
+const setObjectProps = (object, props, list = []) =>
+  Object.keys(props).forEach(key => {
+    const value = props[key];
+
+    if (list.includes(key)) {
+      setObjectProps(object[key], value);
+
+      return;
+    }
+
+    object[key] = value;
+  });
+
+/**
  * Create ElementData object.
  *
  * @param {string} tagName Element's tagname.
@@ -40,12 +59,18 @@ const createElement = data => {
  * @param  {...(ElementData|string)} children Element's children.
  * @return {ElementData}
  */
-const createElementData = (tagName = "div", className = "", ...children) => ({
+const createElementData = (
+  tagName = "div",
+  className = "",
+  attrs = null,
+  ...children
+) => ({
   tagName,
-  attributes: className ? { className } : {},
+  attributes: { ...(className ? { className } : {}), ...(attrs || {}) },
   children
 });
 
-const getPrettyHtml = elem => window.html_beautify(elem.outerHTML);
+const getPrettyHtml = (elem, options = {}) =>
+  window.html_beautify(elem.outerHTML, { indent_size: 2, ...options });
 
 export { createElement, createElementData, getPrettyHtml };
