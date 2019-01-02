@@ -2,10 +2,10 @@
   "name": "cloneable.js-example",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "index.pug",
   "scripts": {
-    "serve": "parcel index.html --open",
-    "build": "parcel build index.html",
+    "serve": "parcel index.pug --open",
+    "build": "parcel build index.pug",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nawawish Samerpark",
@@ -13,10 +13,10 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "parcel-bundler": "^1.11.0",
+    "pug": "^2.0.3",
     "sass": "^1.15.2"
   },
   "dependencies": {
-    "@nawawishkid/cloneable": "^1.0.4",
-    "variables": "^1.0.1"
+    "@nawawishkid/cloneable": "^1.0.5"
   }
 }

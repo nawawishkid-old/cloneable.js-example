@@ -13,10 +13,22 @@
     padding: 0.5em 1em;
     border: none;
     cursor: default;
-    background-color: wheat;
+    line-height: 2;
+    letter-spacing: 2px;
+    background-color: $code-background-color;
+    color: white;
+    opacity: 0.5;
+    font-family: monospace;
 
     &.active {
-      background-color: coral;
+      opacity: 1;
+      outline: none;
+    }
+
+    &:active,
+    &:focus {
+      opacity: 1;
+      outline-color: white;
     }
 
     &:first-child {

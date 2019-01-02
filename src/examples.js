@@ -18,7 +18,7 @@ const defaultContainerData = createElementData(
 const createFormFieldData = () => {
   let index = 0;
 
-  return () => {
+  return (...children) => {
     const id = index;
     const name = `my-field-${id}`;
 
@@ -37,7 +37,8 @@ const createFormFieldData = () => {
           type: "text",
           name,
           placeholder: "Clone me!"
-        })
+        }),
+        ...children
       )
     );
   };
@@ -61,14 +62,35 @@ export default [
     cloneableOptions: {}
   },
   {
-    title: "Set <code>maxCloneable</code> option",
+    title:
+      "Set custom <code>cloneButton</code> and <code>removeButton</code> using existing child elements of the container element",
     detail: "",
+    containerData: getFormFieldData(
+      createElementData(
+        "button",
+        null,
+        { dataset: { cloneableCloneBtn: "" } },
+        "Custom clone me!!!"
+      ),
+      createElementData(
+        "button",
+        null,
+        { dataset: { cloneableRemoveBtn: "" } },
+        "Custom remove me!!!"
+      )
+    ),
+    cloneableOptions: {}
+  },
+  {
+    title: "Set <code>maxCloneable</code> option",
+    detail: "Set maximum number of cloned elements.",
     containerData: defaultContainerData,
     cloneableOptions: { maxCloneable: 3 }
   },
   {
-    title: "Set custom <code>cloneButton</code>",
-    detail: "",
+    title: "Set custom <code>cloneButton</code> and <code>removeButton</code>",
+    detail:
+      "<code>HTMLElement</code> to be used as <code>cloneButton</code> or <code>removeButton</code>",
     containerData: getFormFieldData(),
     cloneableOptions: {
       cloneButton: createElement(
@@ -99,7 +121,8 @@ export default [
   },
   {
     title: "Middlewares",
-    detail: "",
+    detail:
+      "Register middleware function to be called with cloned element as an argument. Use to alter the cloned element.",
     containerData: getFormFieldData(),
     cloneableOptions: {
       middlewares: [
@@ -142,9 +165,26 @@ export default [
     cloneableOptions: {
       maxCloneable: 2,
       events: {
-        load: [() => console.log("Cloneable loaded!")],
-        afterStateChange: [() => alert("State changed!")],
+        load: [() => console.log("Cloneable: loaded!")],
+        beforeStateChange: [() => alert("Cloneable: beforeStateChange")],
+        afterStateChange: [() => alert("Cloneable: afterStateChange!")],
         uncloneable: [() => alert("Maximum limit reached!")]
+      }
+    }
+  },
+  {
+    title:
+      "Disable <code>cloneButton</code> when maximum number of cloned elements reached using <code>afterStateChange</code> event.",
+    detail: "",
+    containerData: getFormFieldData(),
+    cloneableOptions: {
+      maxCloneable: 2,
+      events: {
+        afterStateChange: [
+          function() {
+            this.cloneButton.disabled = !this.isCloneable();
+          }
+        ]
       }
     }
   }

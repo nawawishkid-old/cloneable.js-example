@@ -1,0 +1,36 @@
+//- Variables
+- const scripts = ["https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.8.9/beautify-html.min.js","src/prism.js", "src/index.js"]
+- const socials = [{name: "GitHub", href: "https://github.com/nawawishkid/cloneable.js"}, {name: "Twitter", href: "https://twitter.com/nawawishkid"}]
+
+mixin social(data)
+    span.icon.social-icon
+        a(href=data.href title=data.name)
+            img(
+                src=`src/images/logo-${data.name.toLowerCase()}.png`
+                alt=`${data.name} Logo`
+            )
+
+//- Document
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        title Cloneable.js by nawawishkid 
+        link(href="src/css/index.scss", rel="stylesheet")
+
+    body
+        header#header
+            h1 Cloneable.js
+        #preloader
+            .lds-roller
+                each v in Array(8).fill('')
+                    div
+        #app.is-hidden
+        footer
+            .social-icons
+                each social in socials 
+                    +social(social)
+
+        each src in scripts
+            script(src=src)
